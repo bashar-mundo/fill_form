@@ -104,7 +104,7 @@
           <h1>نموذج تسجيل اللهجة السعودية</h1>
         </div>
       </div>
-      <p class="lead">عبّئ بياناتك ثم سجّل خمسة مقاطع صوتية، كل مقطع أطول من ٤ ثانية.</p>
+      <p class="lead">عبّئ بياناتك ثم سجّل خمسة مقاطع صوتية، كل مقطع أطول من٨ ثواني.</p>
 
       <!-- Section 1 -->
       <div class="card">
@@ -175,14 +175,14 @@ const SUPABASE_KEY = "sb_publishable_jazohUVobYbrL6Qk31E_Ow_C_z_5MGN";
 const BUCKET = "recordings";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const MIN_SEC = 4;
+const MIN_SEC = 8;
 const AR_NUM = ["١","٢","٣","٤","٥"];
 const PROMPTS = [
-  { key:"intro",    title:"التعريف بالنفس", instruction:"سجّل أكثر من ٤ ثانية للتعريف بنفسك.", hint:"مثال: اسمك، من أين أنت، ماذا تعمل، هواياتك" },
-  { key:"surprise", title:"موقف مفاجئ",     instruction:"سجّل أكثر من ٤ ثانية تعبّر فيها عن موقف مفاجئ.", hint:"مثال: تخيّل أنك فجأة قابلت شخصاً لم تره منذ سنوات" },
-  { key:"happy",    title:"موقف سعيد",      instruction:"سجّل أكثر من ٤ ثانية تعبّر فيها عن موقف سعيد.", hint:"مثال: نجاحك في اختبار مهم أو خبر سار وصلك" },
-  { key:"sad",      title:"موقف حزين",      instruction:"سجّل أكثر من ٤ ثانية تعبّر فيها عن موقف حزين.", hint:"مثال: فراق صديق عزيز أو ذكرى مؤثرة" },
-  { key:"angry",    title:"موقف غاضب",      instruction:"سجّل أكثر من ٤ ثانية تعبّر فيها عن موقف غاضب.", hint:"مثال: تأخّر شخص عن موعد مهم بدون سبب" },
+  { key:"intro",    title:"التعريف بالنفس", instruction:"سجّل أكثر من٨ ثواني للتعريف بنفسك.", hint:"مثال: اسمك، من أين أنت، ماذا تعمل، هواياتك" },
+  { key:"surprise", title:"موقف مفاجئ",     instruction:"سجّل أكثر من٨ ثواني تعبّر فيها عن موقف مفاجئ.", hint:"مثال: تخيّل أنك فجأة قابلت شخصاً لم تره منذ سنوات" },
+  { key:"happy",    title:"موقف سعيد",      instruction:"سجّل أكثر من٨ ثواني تعبّر فيها عن موقف سعيد.", hint:"مثال: نجاحك في اختبار مهم أو خبر سار وصلك" },
+  { key:"sad",      title:"موقف حزين",      instruction:"سجّل أكثر من٨ ثواني تعبّر فيها عن موقف حزين.", hint:"مثال: فراق صديق عزيز أو ذكرى مؤثرة" },
+  { key:"angry",    title:"موقف غاضب",      instruction:"سجّل أكثر من٨ ثواني تعبّر فيها عن موقف غاضب.", hint:"مثال: تأخّر شخص عن موعد مهم بدون سبب" },
 ];
 
 const toAr = s => String(s).replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[+d]);
@@ -240,7 +240,7 @@ function renderControls(i){
         <button class="btn btn-stop"><span class="sq"></span>إيقاف</button>
         <div class="live"><span class="live-dot"></span>
           <span class="${okCls}" id="timer-${i}">${fmt(st.elapsed)}</span>
-          <span class="min-note">الحد الأدنى ٤ ثانية</span>
+          <span class="min-note">الحد الأدنى٨ ثواني</span>
         </div></div>`;
     c.querySelector("button").onclick = ()=>stop(i);
   } else { // valid / invalid
@@ -257,7 +257,7 @@ function renderControls(i){
         </div>
         ${st.status==="invalid" ? `<div class="invalid-box">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C0341D" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
-          <span>يجب أن يكون التسجيل أطول من ٤ ثانية</span></div>` : ``}
+          <span>يجب أن يكون التسجيل أطول من٨ ثواني</span></div>` : ``}
       </div>`;
     c.querySelector(".btn-rerec").onclick = ()=>rerecord(i);
   }
