@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>نموذج تسجيل اللهجة السعودية</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:#F5F5ED;color:#3F2420;line-height:1.6;
+    font-family:'SF Arabic','Geeza Pro','Segoe UI',Tahoma,'Noto Sans Arabic',Arial,sans-serif;
+  }
+  input,select,textarea,button{font-family:inherit}
+  ::placeholder{color:rgba(63,36,32,.40)}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.82)}}
+  .page{min-height:100vh;padding:40px 16px 72px}
+  .wrap{max-width:660px;margin:0 auto}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#FF6038;font-weight:700}
+  h1{margin:2px 0 0;font-size:27px;font-weight:800}
+  .lead{margin:0 0 28px;color:rgba(63,36,32,.62);font-size:15.5px}
+  .card{background:#FFFCF5;border:1px solid rgba(63,36,32,.14);border-radius:18px;
+    padding:26px 24px;margin-bottom:26px;box-shadow:0 2px 10px rgba(63,36,32,.05)}
+  .sechead{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+  .badge{background:#3F2420;color:#F5F5ED;width:26px;height:26px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex:none}
+  .sechead h2{margin:0;font-size:18px;font-weight:800}
+  label{display:block;margin-bottom:16px}
+  .lbl{display:block;font-size:14px;font-weight:700;margin-bottom:7px}
+  .req{color:#FF6038}
+  .opt{color:rgba(63,36,32,.45);font-weight:500}
+  input[type=text],input[type=email],input[type=tel],select{
+    width:100%;padding:12px 14px;border:1px solid rgba(63,36,32,.18);border-radius:12px;
+    font-size:15px;background:#fff;color:#3F2420}
+  input:focus,select:focus{outline:none;border-color:#FF6038}
+  .err-text{display:block;margin-top:6px;font-size:13px;color:#C0341D}
+  .recsec-head{display:flex;align-items:center;gap:10px;margin:0 2px 18px}
+  .progress{margin-inline-start:auto;font-size:13px;font-weight:700;color:#FF6038}
+  .rec-card{background:#FFFCF5;border:1px solid rgba(63,36,32,.14);border-radius:18px;
+    padding:22px;margin-bottom:18px;box-shadow:0 2px 10px rgba(63,36,32,.05);transition:border-color .2s}
+  .rec-top{display:flex;align-items:flex-start;gap:13px}
+  .rec-num{flex:none;background:#FF6038;color:#F5F5ED;width:34px;height:34px;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800}
+  .rec-body{flex:1;min-width:0}
+  .rec-titlerow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+  .rec-title{margin:0;font-size:16px;font-weight:800}
+  .chip{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+  .rec-inst{margin:0 0 4px;font-size:14.5px}
+  .rec-hint{margin:0;font-size:13px;color:rgba(63,36,32,.55)}
+  .controls{margin-top:16px}
+  .btn{display:inline-flex;align-items:center;gap:9px;border:none;border-radius:12px;
+    padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer}
+  .btn-rec{background:#FF6038;color:#F5F5ED}
+  .btn-stop{background:#3F2420;color:#F5F5ED}
+  .dot{width:11px;height:11px;border-radius:50%;background:#F5F5ED;display:inline-block}
+  .sq{width:11px;height:11px;border-radius:2px;background:#F5F5ED;display:inline-block}
+  .recording-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .live{display:flex;align-items:center;gap:8px}
+  .live-dot{width:10px;height:10px;border-radius:50%;background:#C0341D;display:inline-block;animation:pulse 1s infinite}
+  .timer{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;color:#FF6038}
+  .timer.ok{color:#1F8A5B}
+  .min-note{font-size:12px;color:rgba(63,36,32,.5)}
+  .recorded{display:flex;flex-direction:column;gap:12px}
+  audio{width:100%;height:42px}
+  .recorded-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .btn-rerec{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#3F2420;
+    border:1.5px solid rgba(63,36,32,.25);border-radius:12px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer}
+  .ok-text{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:#1F8A5B}
+  .invalid-box{display:flex;align-items:center;gap:8px;background:rgba(192,52,29,.08);
+    border:1px solid rgba(192,52,29,.3);border-radius:12px;padding:11px 14px}
+  .invalid-box span{font-size:14px;font-weight:700;color:#C0341D}
+  .mic-err{margin:10px 0 0;font-size:13px;color:#C0341D}
+  .submit{width:100%;margin-top:8px;padding:16px;border:none;border-radius:14px;
+    font-size:17px;font-weight:800;transition:background .15s}
+  .submit.off{background:rgba(63,36,32,.14);color:rgba(63,36,32,.4);cursor:not-allowed}
+  .submit.on{background:#FF6038;color:#F5F5ED;cursor:pointer;box-shadow:0 6px 18px rgba(255,96,56,.32)}
+  .submit-note{margin:12px 0 0;text-align:center;font-size:13px;color:rgba(63,36,32,.55)}
+  .global{margin:14px 0 0;text-align:center;font-size:14px;min-height:20px}
+  .thanks{background:#FFFCF5;border:1px solid rgba(63,36,32,.14);border-radius:20px;
+    padding:56px 32px;text-align:center;box-shadow:0 8px 28px rgba(63,36,32,.10);display:none}
+  .thanks .circle{width:76px;height:76px;margin:0 auto 24px;border-radius:50%;background:#1F8A5B;
+    display:flex;align-items:center;justify-content:center}
+  .thanks h2{margin:0 0 10px;font-size:26px;font-weight:800}
+  .thanks p{margin:0 0 28px;color:rgba(63,36,32,.62);font-size:16px}
+  .btn-again{background:transparent;color:#FF6038;border:1.5px solid #FF6038;border-radius:12px;
+    padding:12px 26px;font-size:15px;font-weight:700;cursor:pointer}
+  .headrow{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="wrap">
+
+    <!-- FORM -->
+    <div id="formView">
+      <div class="headrow">
+        <svg width="46" height="46" viewBox="0 0 48 48" aria-hidden="true">
+          <ellipse cx="24" cy="24" rx="22" ry="10.5" transform="rotate(-28 24 24)" fill="none" stroke="#FF6038" stroke-width="2.4"></ellipse>
+          <rect x="15" y="15" width="18" height="18" rx="6" fill="#FF6038"></rect>
+          <circle cx="41" cy="13" r="3" fill="#3F2420"></circle>
+        </svg>
+        <div>
+          <div class="eyebrow">جمع بيانات صوتية</div>
+          <h1>نموذج تسجيل اللهجة السعودية</h1>
+        </div>
+      </div>
+      <p class="lead">عبّئ بياناتك ثم سجّل خمسة مقاطع صوتية، كل مقطع أطول من ٤ ثانية.</p>
+
+      <!-- Section 1 -->
+      <div class="card">
+        <div class="sechead"><span class="badge">١</span><h2>المعلومات الشخصية</h2></div>
+
+        <label>
+          <span class="lbl">الاسم الكامل <span class="req">*</span></span>
+          <input type="text" id="fullName" placeholder="أدخل اسمك الكامل">
+        </label>
+        <label>
+          <span class="lbl">البريد الإلكتروني <span class="req">*</span></span>
+          <input type="email" id="email" dir="ltr" placeholder="name@example.com" style="text-align:right">
+          <span class="err-text" id="emailErr" style="display:none">يرجى إدخال بريد إلكتروني صحيح</span>
+        </label>
+        <label>
+          <span class="lbl">رقم الجوال <span class="req">*</span></span>
+          <input type="tel" id="phone" dir="ltr" placeholder="05XXXXXXXX" style="text-align:right">
+        </label>
+        <label>
+          <span class="lbl">اللهجة <span class="req">*</span></span>
+          <select id="dialect">
+            <option value="" disabled selected>اختر اللهجة</option>
+            <option value="نجدية">نجدية</option>
+            <option value="حجازية">حجازية</option>
+            <option value="جنوبية">جنوبية</option>
+            <option value="شمالية">شمالية</option>
+            <option value="شرقية">شرقية</option>
+          </select>
+        </label>
+        <label style="margin-bottom:0">
+          <span class="lbl">معلومات إضافية عن اللهجة <span class="opt">(اختياري)</span></span>
+          <input type="text" id="dialectExtra" placeholder="مثال: قصيمية">
+        </label>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="recsec-head">
+        <span class="badge">٢</span>
+        <h2 style="margin:0;font-size:18px;font-weight:800">التسجيلات الصوتية</h2>
+        <span class="progress" id="progress">اكتملت ٠ من ٥ تسجيلات</span>
+      </div>
+
+      <div id="recordings"></div>
+
+      <button class="submit off" id="submitBtn" disabled>إرسال</button>
+      <p class="submit-note" id="submitNote">يُفعّل زر الإرسال بعد تعبئة جميع الحقول واكتمال التسجيلات الخمسة.</p>
+      <div class="global" id="global"></div>
+    </div>
+
+    <!-- THANKS -->
+    <div class="thanks" id="thanksView">
+      <div class="circle">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#F5F5ED" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+      </div>
+      <h2>شكراً لك، تم استلام تسجيلاتك بنجاح</h2>
+      <p>نقدّر مساهمتك في توثيق اللهجات السعودية.</p>
+      <button class="btn-again" id="againBtn">إرسال نموذج آخر</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ===== Supabase config (your project) ===== */
+const SUPABASE_URL = "https://fycqwqgpxtouwrnusajj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_jazohUVobYbrL6Qk31E_Ow_C_z_5MGN";
+const BUCKET = "recordings";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const MIN_SEC = 4;
+const AR_NUM = ["١","٢","٣","٤","٥"];
+const PROMPTS = [
+  { key:"intro",    title:"التعريف بالنفس", instruction:"سجّل أكثر من ٤ ثانية للتعريف بنفسك.", hint:"مثال: اسمك، من أين أنت، ماذا تعمل، هواياتك" },
+  { key:"surprise", title:"موقف مفاجئ",     instruction:"سجّل أكثر من ٤ ثانية تعبّر فيها عن موقف مفاجئ.", hint:"مثال: تخيّل أنك فجأة قابلت شخصاً لم تره منذ سنوات" },
+  { key:"happy",    title:"موقف سعيد",      instruction:"سجّل أكثر من ٤ ثانية تعبّر فيها عن موقف سعيد.", hint:"مثال: نجاحك في اختبار مهم أو خبر سار وصلك" },
+  { key:"sad",      title:"موقف حزين",      instruction:"سجّل أكثر من ٤ ثانية تعبّر فيها عن موقف حزين.", hint:"مثال: فراق صديق عزيز أو ذكرى مؤثرة" },
+  { key:"angry",    title:"موقف غاضب",      instruction:"سجّل أكثر من ٤ ثانية تعبّر فيها عن موقف غاضب.", hint:"مثال: تأخّر شخص عن موعد مهم بدون سبب" },
+];
+
+const toAr = s => String(s).replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[+d]);
+const fmt = sec => { const m=Math.floor(sec/60), s=Math.floor(sec%60); return toAr(m+":"+String(s).padStart(2,"0")); };
+const emailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+// per-recording runtime state
+const R = PROMPTS.map(() => ({ status:"idle", elapsed:0, duration:0, blob:null, url:null, mr:null, stream:null, chunks:[], interval:null, startAt:0, micError:false }));
+
+const container = document.getElementById("recordings");
+PROMPTS.forEach((p,i)=>{
+  const el = document.createElement("div");
+  el.className = "rec-card"; el.id = "card-"+i;
+  el.innerHTML = `
+    <div class="rec-top">
+      <span class="rec-num" id="num-${i}">${AR_NUM[i]}</span>
+      <div class="rec-body">
+        <div class="rec-titlerow">
+          <h3 class="rec-title">${p.title}</h3>
+          <span class="chip" id="chip-${i}"></span>
+        </div>
+        <p class="rec-inst">${p.instruction}</p>
+        <p class="rec-hint">${p.hint}</p>
+      </div>
+    </div>
+    <div class="controls" id="controls-${i}"></div>`;
+  container.appendChild(el);
+  renderControls(i);
+});
+
+function renderControls(i){
+  const st = R[i];
+  const c = document.getElementById("controls-"+i);
+  const chip = document.getElementById("chip-"+i);
+  const num = document.getElementById("num-"+i);
+  const card = document.getElementById("card-"+i);
+
+  // chip + colors
+  let label="لم يُسجَّل", col="rgba(63,36,32,.6)", bg="rgba(63,36,32,.07)";
+  if(st.status==="recording"){label="جارٍ التسجيل…";col="#C0341D";bg="rgba(192,52,29,.10)";}
+  else if(st.status==="valid"){label="تسجيل صالح";col="#1F8A5B";bg="rgba(31,138,91,.12)";}
+  else if(st.status==="invalid"){label="غير صالح";col="#C0341D";bg="rgba(192,52,29,.10)";}
+  chip.textContent=label; chip.style.color=col; chip.style.background=bg;
+  num.style.background = st.status==="valid" ? "#1F8A5B" : "#FF6038";
+  card.style.borderColor = st.status==="valid" ? "rgba(31,138,91,.45)"
+      : (st.status==="invalid" ? "rgba(192,52,29,.4)" : "rgba(63,36,32,.14)");
+
+  if(st.status==="idle"){
+    c.innerHTML = `<button class="btn btn-rec"><span class="dot"></span>تسجيل</button>
+      ${st.micError ? '<p class="mic-err">تعذّر الوصول إلى الميكروفون. يرجى السماح باستخدامه ثم المحاولة مرة أخرى.</p>' : ''}`;
+    c.querySelector("button").onclick = ()=>start(i);
+  } else if(st.status==="recording"){
+    const okCls = st.elapsed>=MIN_SEC ? "timer ok":"timer";
+    c.innerHTML = `<div class="recording-row">
+        <button class="btn btn-stop"><span class="sq"></span>إيقاف</button>
+        <div class="live"><span class="live-dot"></span>
+          <span class="${okCls}" id="timer-${i}">${fmt(st.elapsed)}</span>
+          <span class="min-note">الحد الأدنى ٤ ثانية</span>
+        </div></div>`;
+    c.querySelector("button").onclick = ()=>stop(i);
+  } else { // valid / invalid
+    c.innerHTML = `<div class="recorded">
+        <audio controls src="${st.url}"></audio>
+        <div class="recorded-row">
+          <button class="btn-rerec">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>
+            إعادة التسجيل
+          </button>
+          ${st.status==="valid" ? `<span class="ok-text">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+            تم التسجيل بنجاح (${fmt(st.duration)})</span>` : ``}
+        </div>
+        ${st.status==="invalid" ? `<div class="invalid-box">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C0341D" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+          <span>يجب أن يكون التسجيل أطول من ٤ ثانية</span></div>` : ``}
+      </div>`;
+    c.querySelector(".btn-rerec").onclick = ()=>rerecord(i);
+  }
+  updateProgress();
+}
+
+async function start(i){
+  const st = R[i];
+  st.micError=false;
+  let stream;
+  try{ stream = await navigator.mediaDevices.getUserMedia({audio:true}); }
+  catch(e){ st.micError=true; st.status="idle"; renderControls(i); return; }
+  st.stream=stream; st.chunks=[];
+  let mr; try{ mr=new MediaRecorder(stream); }catch(e){ mr=new MediaRecorder(stream,{}); }
+  st.mr=mr;
+  mr.ondataavailable = e=>{ if(e.data&&e.data.size) st.chunks.push(e.data); };
+  mr.onstop = ()=>{
+    clearInterval(st.interval);
+    const dur=(performance.now()-st.startAt)/1000;
+    st.blob=new Blob(st.chunks,{type:mr.mimeType||"audio/webm"});
+    st.url=URL.createObjectURL(st.blob);
+    try{ stream.getTracks().forEach(t=>t.stop()); }catch(e){}
+    st.duration=dur; st.elapsed=dur;
+    st.status = dur>MIN_SEC ? "valid":"invalid";
+    renderControls(i);
+  };
+  st.startAt=performance.now(); st.status="recording"; st.elapsed=0; st.url=null;
+  mr.start();
+  renderControls(i);
+  st.interval=setInterval(()=>{
+    st.elapsed=(performance.now()-st.startAt)/1000;
+    const t=document.getElementById("timer-"+i);
+    if(t){ t.textContent=fmt(st.elapsed); t.className = st.elapsed>=MIN_SEC ? "timer ok":"timer"; }
+  },200);
+}
+
+function stop(i){ const mr=R[i].mr; if(mr&&mr.state!=="inactive") mr.stop(); }
+
+function rerecord(i){
+  const st=R[i];
+  if(st.url){ try{URL.revokeObjectURL(st.url);}catch(e){} }
+  Object.assign(st,{status:"idle",elapsed:0,duration:0,blob:null,url:null,micError:false});
+  renderControls(i);
+}
+
+function updateProgress(){
+  const valid = R.filter(r=>r.status==="valid").length;
+  document.getElementById("progress").textContent = "اكتملت "+toAr(valid)+" من ٥ تسجيلات";
+  refreshSubmit();
+}
+
+function textOk(){
+  return document.getElementById("fullName").value.trim() &&
+         emailOk(document.getElementById("email").value) &&
+         document.getElementById("phone").value.trim() &&
+         document.getElementById("dialect").value;
+}
+function refreshSubmit(){
+  const ok = textOk() && R.every(r=>r.status==="valid");
+  const btn=document.getElementById("submitBtn");
+  btn.disabled=!ok;
+  btn.className = "submit "+(ok?"on":"off");
+  document.getElementById("submitNote").style.display = ok ? "none":"block";
+}
+
+// email inline validation + live submit refresh
+["fullName","phone","dialect"].forEach(id=>{
+  document.getElementById(id).addEventListener("input",refreshSubmit);
+  document.getElementById(id).addEventListener("change",refreshSubmit);
+});
+const emailEl=document.getElementById("email");
+emailEl.addEventListener("input",()=>{
+  const v=emailEl.value;
+  const bad = v.trim().length>0 && !emailOk(v);
+  document.getElementById("emailErr").style.display = bad ? "block":"none";
+  emailEl.style.borderColor = bad ? "rgba(192,52,29,.55)" : "rgba(63,36,32,.18)";
+  refreshSubmit();
+});
+
+document.getElementById("submitBtn").addEventListener("click", async ()=>{
+  const btn=document.getElementById("submitBtn");
+  const g=document.getElementById("global");
+  if(btn.disabled) return;
+  btn.disabled=true; btn.className="submit off";
+  g.style.color="rgba(63,36,32,.7)"; g.textContent="جارٍ الإرسال…";
+
+  try{
+    const stamp=Date.now();
+    const safe=(document.getElementById("fullName").value.trim()||"user").replace(/[^a-zA-Z0-9]/g,"_");
+    const folder=`${stamp}_${safe}`;
+    const paths={};
+    for(let i=0;i<PROMPTS.length;i++){
+      const path=`${folder}/${PROMPTS[i].key}.webm`;
+      const { error } = await sb.storage.from(BUCKET).upload(path, R[i].blob, {contentType:"audio/webm",upsert:false});
+      if(error) throw error;
+      paths[PROMPTS[i].key]=path;
+    }
+    const { error:insErr } = await sb.from("submissions").insert({
+      full_name:    document.getElementById("fullName").value.trim(),
+      email:        document.getElementById("email").value.trim(),
+      phone:        document.getElementById("phone").value.trim(),
+      dialect:      document.getElementById("dialect").value,
+      dialect_note: document.getElementById("dialectExtra").value.trim() || null,
+      audio_intro:    paths.intro,
+      audio_surprise: paths.surprise,
+      audio_happy:    paths.happy,
+      audio_sad:      paths.sad,
+      audio_angry:    paths.angry
+    });
+    if(insErr) throw insErr;
+
+    document.getElementById("formView").style.display="none";
+    document.getElementById("thanksView").style.display="block";
+    window.scrollTo(0,0);
+  }catch(err){
+    g.style.color="#C0341D";
+    g.textContent="حدث خطأ أثناء الإرسال: "+(err.message||err);
+    btn.disabled=false; btn.className="submit on";
+  }
+});
+
+document.getElementById("againBtn").addEventListener("click", ()=>{
+  R.forEach((st,i)=>{ if(st.url){try{URL.revokeObjectURL(st.url);}catch(e){}} Object.assign(st,{status:"idle",elapsed:0,duration:0,blob:null,url:null,micError:false}); renderControls(i); });
+  ["fullName","email","phone","dialectExtra"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("dialect").value="";
+  document.getElementById("emailErr").style.display="none";
+  document.getElementById("global").textContent="";
+  document.getElementById("thanksView").style.display="none";
+  document.getElementById("formView").style.display="block";
+  refreshSubmit(); window.scrollTo(0,0);
+});
+
+refreshSubmit();
+</script>
+</body>
+</html>
