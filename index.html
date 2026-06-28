@@ -19,6 +19,9 @@
   .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#FF6038;font-weight:700}
   h1{margin:2px 0 0;font-size:27px;font-weight:800}
   .lead{margin:0 0 28px;color:rgba(63,36,32,.62);font-size:15.5px}
+  .notice{display:flex;gap:10px;align-items:flex-start;background:#FFF4EF;
+    border:1px solid rgba(255,96,56,.3);border-radius:14px;padding:14px 16px;margin:0 0 28px}
+  .notice span{font-size:14px;font-weight:600;color:#3F2420;line-height:1.6}
   .card{background:#FFFCF5;border:1px solid rgba(63,36,32,.14);border-radius:18px;
     padding:26px 24px;margin-bottom:26px;box-shadow:0 2px 10px rgba(63,36,32,.05)}
   .sechead{display:flex;align-items:center;gap:10px;margin-bottom:20px}
@@ -104,7 +107,11 @@
           <h1>نموذج تسجيل اللهجة السعودية</h1>
         </div>
       </div>
-      <p class="lead">عبّئ بياناتك ثم سجّل خمسة مقاطع صوتية، كل مقطع أطول من٨ ثواني.</p>
+      <p class="lead">عبّئ بياناتك ثم سجّل خمسة مقاطع صوتية، كل مقطع أطول من ٢٠ ثانية.</p>
+      <div class="notice">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6038" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+        <span>هذه التسجيلات لغرض الاختبار واختيار المرشحين فقط. سنتواصل معك في حال تم قبولك.</span>
+      </div>
 
       <!-- Section 1 -->
       <div class="card">
@@ -133,6 +140,10 @@
             <option value="شمالية">شمالية</option>
             <option value="شرقية">شرقية</option>
           </select>
+        </label>
+        <label>
+          <span class="lbl">مدينة الإقامة <span class="req">*</span></span>
+          <input type="text" id="city" placeholder="مثال: الرياض">
         </label>
         <label style="margin-bottom:0">
           <span class="lbl">معلومات إضافية عن اللهجة <span class="opt">(اختياري)</span></span>
@@ -175,14 +186,14 @@ const SUPABASE_KEY = "sb_publishable_jazohUVobYbrL6Qk31E_Ow_C_z_5MGN";
 const BUCKET = "recordings";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const MIN_SEC = 8;
+const MIN_SEC = 20;
 const AR_NUM = ["١","٢","٣","٤","٥"];
 const PROMPTS = [
-  { key:"intro",    title:"التعريف بالنفس", instruction:"سجّل أكثر من٨ ثواني للتعريف بنفسك.", hint:"مثال: اسمك، من أين أنت، ماذا تعمل، هواياتك" },
-  { key:"surprise", title:"موقف مفاجئ",     instruction:"سجّل أكثر من٨ ثواني تعبّر فيها عن موقف مفاجئ.", hint:"مثال: تخيّل أنك فجأة قابلت شخصاً لم تره منذ سنوات" },
-  { key:"happy",    title:"موقف سعيد",      instruction:"سجّل أكثر من٨ ثواني تعبّر فيها عن موقف سعيد.", hint:"مثال: نجاحك في اختبار مهم أو خبر سار وصلك" },
-  { key:"sad",      title:"موقف حزين",      instruction:"سجّل أكثر من٨ ثواني تعبّر فيها عن موقف حزين.", hint:"مثال: فراق صديق عزيز أو ذكرى مؤثرة" },
-  { key:"angry",    title:"موقف غاضب",      instruction:"سجّل أكثر من٨ ثواني تعبّر فيها عن موقف غاضب.", hint:"مثال: تأخّر شخص عن موعد مهم بدون سبب" },
+  { key:"intro",    title:"التعريف بالنفس", instruction:"سجّل أكثر من ٢٠ ثانية للتعريف بنفسك.", hint:"مثال: اسمك، من أين أنت، ماذا تعمل، هواياتك" },
+  { key:"surprise", title:"موقف مفاجئ",     instruction:"سجّل أكثر من ٢٠ ثانية تعبّر فيها عن موقف مفاجئ.", hint:"مثال: تخيّل أنك فجأة قابلت شخصاً لم تره منذ سنوات" },
+  { key:"happy",    title:"موقف سعيد",      instruction:"سجّل أكثر من ٢٠ ثانية تعبّر فيها عن موقف سعيد.", hint:"مثال: نجاحك في اختبار مهم أو خبر سار وصلك" },
+  { key:"sad",      title:"موقف حزين",      instruction:"سجّل أكثر من ٢٠ ثانية تعبّر فيها عن موقف حزين.", hint:"مثال: فراق صديق عزيز أو ذكرى مؤثرة" },
+  { key:"angry",    title:"موقف غاضب",      instruction:"سجّل أكثر من ٢٠ ثانية تعبّر فيها عن موقف غاضب.", hint:"مثال: تأخّر شخص عن موعد مهم بدون سبب" },
 ];
 
 const toAr = s => String(s).replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[+d]);
@@ -240,7 +251,7 @@ function renderControls(i){
         <button class="btn btn-stop"><span class="sq"></span>إيقاف</button>
         <div class="live"><span class="live-dot"></span>
           <span class="${okCls}" id="timer-${i}">${fmt(st.elapsed)}</span>
-          <span class="min-note">الحد الأدنى٨ ثواني</span>
+          <span class="min-note">الحد الأدنى ٢٠ ثانية</span>
         </div></div>`;
     c.querySelector("button").onclick = ()=>stop(i);
   } else { // valid / invalid
@@ -257,7 +268,7 @@ function renderControls(i){
         </div>
         ${st.status==="invalid" ? `<div class="invalid-box">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C0341D" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
-          <span>يجب أن يكون التسجيل أطول من٨ ثواني</span></div>` : ``}
+          <span>يجب أن يكون التسجيل أطول من ٢٠ ثانية</span></div>` : ``}
       </div>`;
     c.querySelector(".btn-rerec").onclick = ()=>rerecord(i);
   }
@@ -313,7 +324,8 @@ function textOk(){
   return document.getElementById("fullName").value.trim() &&
          emailOk(document.getElementById("email").value) &&
          document.getElementById("phone").value.trim() &&
-         document.getElementById("dialect").value;
+         document.getElementById("dialect").value &&
+         document.getElementById("city").value.trim();
 }
 function refreshSubmit(){
   const ok = textOk() && R.every(r=>r.status==="valid");
@@ -324,7 +336,7 @@ function refreshSubmit(){
 }
 
 // email inline validation + live submit refresh
-["fullName","phone","dialect"].forEach(id=>{
+["fullName","phone","dialect","city"].forEach(id=>{
   document.getElementById(id).addEventListener("input",refreshSubmit);
   document.getElementById(id).addEventListener("change",refreshSubmit);
 });
@@ -360,6 +372,7 @@ document.getElementById("submitBtn").addEventListener("click", async ()=>{
       email:        document.getElementById("email").value.trim(),
       phone:        document.getElementById("phone").value.trim(),
       dialect:      document.getElementById("dialect").value,
+      city:         document.getElementById("city").value.trim(),
       dialect_note: document.getElementById("dialectExtra").value.trim() || null,
       audio_intro:    paths.intro,
       audio_surprise: paths.surprise,
@@ -381,7 +394,7 @@ document.getElementById("submitBtn").addEventListener("click", async ()=>{
 
 document.getElementById("againBtn").addEventListener("click", ()=>{
   R.forEach((st,i)=>{ if(st.url){try{URL.revokeObjectURL(st.url);}catch(e){}} Object.assign(st,{status:"idle",elapsed:0,duration:0,blob:null,url:null,micError:false}); renderControls(i); });
-  ["fullName","email","phone","dialectExtra"].forEach(id=>document.getElementById(id).value="");
+  ["fullName","email","phone","city","dialectExtra"].forEach(id=>document.getElementById(id).value="");
   document.getElementById("dialect").value="";
   document.getElementById("emailErr").style.display="none";
   document.getElementById("global").textContent="";
